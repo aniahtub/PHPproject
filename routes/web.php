@@ -12,12 +12,20 @@
 */
 
 Route::get('/', function () {
-    return view('welcome')->with('data',['name'=>'imran','age'=>21,'status'=>'married']);
-});
-Route::get('/todos', 'TodosController@index');
-Route::get('todos/{todo}', 'TodosController@show');
-Route::get('/new-todo', 'TodosController@create');
-Route::post('store-todo', 'TodosController@store');
-Route::get('/todo/{todo}/edit', 'TodosController@edit');
-Route::post('/todo/{todo}/update', 'TodosController@update');
-Route::get('/todo/{todo}/delete', 'TodosController@destroy');
+    return view('welcome');
+})->name('welcome');
+Route::get('/todos','TodosController@index')->name('index');
+Route::get('/todos/{todo}', 'TodosController@show')->name('show');
+Route::get('/new-todo', 'TodosController@create')->name('create');
+Route::post('store-todo', 'TodosController@store')->name('store');
+Route::get('/todo/{todo}/edit', 'TodosController@edit')->name('edit');
+Route::post('/todo/{todo}/update', 'TodosController@update')->name('update');
+Route::get('/todo/{todo}/delete', 'TodosController@destroy')->name('destroy');
+Route::get('/todo/{todo}/complete', 'TodosController@complete')->name('complete');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

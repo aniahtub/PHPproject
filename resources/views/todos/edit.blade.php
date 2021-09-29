@@ -22,12 +22,16 @@ Update Todo
                     </ul>
                 </div>
                 @endif
-                <form action="/todo/{{$todo->id}}/update" method="post">
+                <form action="{{route('update',$todo->id)}}" method="post">
                     @csrf
                     <div class="form-group">
                         <input type="text" name="name" class="form-control" placeholder="Name" value="{{$todo->name}}"
                             aria-describedby="helpId">
                     </div>
+                    <div class="form-group">
+                            <input type="text" name="reminder" class="form-control" placeholder="Reminder"
+                               onfocus="(this.type='datetime-local')" aria-describedby="helpId" >
+                        </div>
                     <div class="form-group">
                         <textarea class="form-control" name="description" id="5" rows="5"
                             placeholder="Description">{{$todo->description}}</textarea>

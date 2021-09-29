@@ -17,6 +17,7 @@ class CreateTodosTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->text('description');
+            $table->time('reminder');
             $table->boolean('completed');
             $table->timestamps();
         });

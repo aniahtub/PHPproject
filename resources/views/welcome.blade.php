@@ -81,11 +81,8 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    <a href="/todos">Todos</a>
-                    {{$data['name']}}
-                    {{$data['status']}}
+                    <a href="{{route('index')}}">Todos</a>
                 </div>
-
             </div>
         </div>
     </body>

@@ -3,9 +3,47 @@
 Todos list
 @endsection
 @section('content')
-<h1 class="text-center my-5" style="text-shadow:0 0.3rem 0.5rem rgb(0 0 0 / 30%);">Todos Page</h1>
+<h1 class="text-center my-4" style="text-shadow:0 0.3rem 0.5rem rgb(0 0 0 / 30%);">Create New Todo</h1>
 <div class="row justify-content-center">
     <div class="col-md-8">
+        <div class="card card-default my-4">
+            <div class="card-header">
+                Create new Todo
+            </div>
+            <div class="card-body">
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="list-group">
+                        @foreach ($errors->all() as $error)
+                        <li class="list-group-item">
+                            {{$error}}
+                        </li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
+                <form action="{{route('store')}}" method="post" onsubmit="event.preventDefault();subTodo();" id="todoForm">
+                    @csrf
+                    <div class="row justify-content-center">
+                        <div class="form-group col-md-6">
+                            <input type="text" name="name" class="form-control" placeholder="Name"
+                                aria-describedby="helpId">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input type="text" name="reminder" class="form-control" placeholder="Reminder" id="reminder"
+                             onchange="remind()"  onfocus="(this.type='time')" aria-describedby="helpId" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" name="description" id="5" rows="5"
+                            placeholder="Description"></textarea>
+                    </div>
+                    <div class="form-group text-center m-0">
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
         <div class="card card-default">
             <div class="card-header">
                 Todos
@@ -15,7 +53,13 @@ Todos list
                     @foreach ($todos as $todo)
                     <li class="list-group-item  ">
                         {{$todo->name}}
-                        <a href="/todos/{{$todo->id}}" class="btn btn-primary btn-sm float-right">View</a>
+                        @if (!$todo->completed)
+                        <a href="{{route('complete',$todo->id)}}"
+                            class="btn btn-warning btn-sm float-right text-white">Complete</a>
+                        @endif
+                        <a href="{{route('destroy',$todo->id)}}" class="btn btn-sm btn-danger float-right mr-2">Delete</a>
+                        <a href="{{route('edit',$todo->id)}}" class="btn btn-sm btn-info float-right mr-2">Edit</a>
+                        <a href="{{route('show',$todo->id)}}" class="btn btn-primary btn-sm float-right mr-2">View</a>
                     </li>
                     @endforeach
                 </ul>
@@ -23,4 +67,113 @@ Todos list
         </div>
     </div>
 </div>
+<script>
+    remValue=document.getElementById('reminder').value   
+    $todos= {!! json_encode($todos->toArray()) !!}
+    console.log($todos)
+    $reminders=[]
+    $todos.forEach(element => {
+        if(element['reminder']!=null&&element['completed']!=1)
+        $reminders.push(element['reminder'])
+    });
+    $reminders=$reminders.sort();
+    console.log($reminders)
+
+    function remind(){
+        remValue=document.getElementById('reminder').value
+        var today=new Date()
+        var remTime=new Date()
+        remValue=remValue.split(":");
+        remTime.setHours(remValue[0]);
+        remTime.setMinutes(remValue[1]);
+        remTime.setSeconds(0);
+        today.setSeconds(0);
+        remTime=remTime.getTime()
+        today=today.getTime()
+        if(remTime<today)
+        {
+        alert('Given time is not valid');
+        }
+
+    }
+
+    function subTodo(){
+        remValue=document.getElementById('reminder').value
+        var today=new Date()
+        var remTime=new Date()
+        remValue=remValue.split(":");
+        remTime.setHours(remValue[0]);
+        remTime.setMinutes(remValue[1]);
+        remTime.setSeconds(0);
+        today.setSeconds(0);
+        remTime=remTime.getTime()
+        today=today.getTime()
+        if(remTime<today)
+        {
+        alert('Given time is not valid');
+        }
+        else{
+            var verify=false;
+            $reminders.forEach(element => {
+              var item=new Date();
+              element=element.split(":");
+              item.setHours(element[0]);
+              item.setMinutes(element[1]);
+              item.setSeconds(0);
+              item=item.getTime();
+              if(item==remTime)
+                {
+                    alert('Given time is inserted')
+                    verify=true;
+                }
+            });
+            if(verify==false)
+            {
+                document.getElementById("todoForm").submit();
+            }
+        }
+    }
+    $reminders.forEach(element => {
+        var item=new Date();
+   
+        element=element.split(":");
+        item.setHours(element[0]);
+        item.setMinutes(element[1]);
+        item.setSeconds(0);
+        item=item.getTime();
+        var inter=setInterval(() => {
+                console.log('hii')
+            var today=new Date()
+            today.setSeconds(0);
+            today=today.getTime()
+            console.log(today)
+            console.log(item)
+            if(today==item)
+            {
+                $todos.forEach(e => {
+                    var todo=new Date();
+                    var task=e.reminder.split(":");
+                    todo.setHours(task[0]);
+                    todo.setMinutes(task[1]);
+                    todo.setSeconds(0);
+                    todo=todo.getTime();
+                    if(todo==item)
+                    {
+                        alert('complete todo now')
+                        let url = "{{ route('complete',':id') }}";
+                        url = url.replace(':id',e.id);
+                        console.log(url)
+                        document.location.href=url;
+                    }
+                });
+                imran();
+            }
+
+        },1);
+              
+    });
+    function imran(){
+        clearInterval(inter);
+    }
+</script>
 @endsection

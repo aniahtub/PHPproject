@@ -4,9 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Todo;
+use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class TodosController extends Controller
 {
+    public function __construct(){
+        $this->middleware('auth');
+    }
     function index(){
         return view('todos.index')->with('todos',Todo::all());
     }
@@ -21,9 +26,11 @@ class TodosController extends Controller
             'name'=>'required|min:4',
             'description'=>'required'
         ]);
+        // dd(Carbon::parse($req->reminder)->format('d-m-Y H:i:s'));
         Todo::create([
             'name'=>$req->name,
             'description'=>$req->description,
+            'reminder'=>$req->reminder,
             'completed'=>false
         ]);
         session()->flash('status',' Todo created successfully.');
@@ -52,5 +59,15 @@ class TodosController extends Controller
         $todo->delete();
         session()->flash('status',' Todo deleted successfully.');
         return redirect('/todos');
+    }
+    function complete(Todo $todo)
+    {
+        $todo->completed=true;
+        $todo->save();
+        session()->flash('status',' Todo completed successfully.');
+        return redirect(route('index'));
+
+
+
     }
 }
