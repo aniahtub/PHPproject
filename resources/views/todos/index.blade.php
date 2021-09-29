@@ -50,16 +50,24 @@ Todos list
             </div>
             <div class="card-body">
                 <ul class="list-group">
+                    <?php $count=0; ?>
                     @foreach ($todos as $todo)
-                    <li class="list-group-item  ">
+                    <li class="list-group-item {{($todo->priority!=null)?'bg-success':' '}} ">
                         {{$todo->name}}
-                        @if (!$todo->completed)
-                        <a href="{{route('complete',$todo->id)}}"
-                            class="btn btn-warning btn-sm float-right text-white">Complete</a>
+                        @if ($todo->completed)
+                        <a href="#"
+                            class="btn btn-outline-warning btn-sm float-right">Complete</a>
                         @endif
                         <a href="{{route('destroy',$todo->id)}}" class="btn btn-sm btn-danger float-right mr-2">Delete</a>
                         <a href="{{route('edit',$todo->id)}}" class="btn btn-sm btn-info float-right mr-2">Edit</a>
                         <a href="{{route('show',$todo->id)}}" class="btn btn-primary btn-sm float-right mr-2">View</a>
+                        @if ($todo->priority!=null)
+                        <a href="{{route('remPriority',$todo->id)}}" class="btn btn-light btn-sm float-right mr-2">Remove Priority</a>
+                        <a href="{{route('priority',$todo->id)}}" class="btn btn-light btn-sm float-right mr-2">Set Priority</a>
+                        <button class="btn btn-outline-warning  btn-sm float-right mr-2">{{++$count}} Priority</button>
+                        @else
+                        <a href="{{route('priority',$todo->id)}}" class="btn btn-light btn-sm float-right mr-2">Set Priority</a>
+                        @endif
                     </li>
                     @endforeach
                 </ul>
@@ -159,10 +167,11 @@ Todos list
                     todo=todo.getTime();
                     if(todo==item)
                     {
-                        alert('complete todo now')
-                        let url = "{{ route('complete',':id') }}";
-                        url = url.replace(':id',e.id);
-                        console.log(url)
+                        alert("It's time to complete"+e.name+"Todo!")
+                            let url = "{{ route('complete',':id') }}";
+                            url = url.replace(':id',e.id);
+                            console.log(url)
+                     
                         document.location.href=url;
                     }
                 });

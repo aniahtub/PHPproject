@@ -22,6 +22,8 @@ Route::get('/todo/{todo}/edit', 'TodosController@edit')->name('edit');
 Route::post('/todo/{todo}/update', 'TodosController@update')->name('update');
 Route::get('/todo/{todo}/delete', 'TodosController@destroy')->name('destroy');
 Route::get('/todo/{todo}/complete', 'TodosController@complete')->name('complete');
+Route::get('/todo/{todo}/priority', 'TodosController@priority')->name('priority');
+Route::get('/todo/{todo}/remPriority', 'TodosController@remPriority')->name('remPriority');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
