@@ -108,6 +108,7 @@ Todos list
         today.setSeconds(0);
         remTime=remTime.getTime()
         today=today.getTime()
+
         if(remTime<today)
         {
         alert('Given time is not valid');
@@ -141,45 +142,48 @@ Todos list
         item.setMinutes(element[1]);
         item.setSeconds(0);
         // item=item.getTime();
-        const item = new Date(item).toLocaleTimeString('en',
+        const itemlatest = new Date(item).toLocaleTimeString('en',
                  { timeStyle: 'short', hour12: false, timeZone: 'UTC' });
+                 console.log(itemlatest)
         var inter=setInterval(() => {
                 console.log('hii')
             var today=new Date()
             today.setSeconds(0);
             // today=today.getTime()
-            const today = new Date(today).toLocaleTimeString('en',
+            const todaylatest = new Date(today).toLocaleTimeString('en',
                  { timeStyle: 'short', hour12: false, timeZone: 'UTC' });
-            console.log(today)
-            console.log(item)
-            if(today==item)
+            console.log(todaylatest)
+            console.log(itemlatest)
+            if(todaylatest==itemlatest)
             {
                 $todos.forEach(e => {
-                    var todo=new Date();
-                    var task=e.reminder.split(":");
-                    todo.setHours(task[0]);
-                    todo.setMinutes(task[1]);
-                    todo.setSeconds(0);
-                    // todo=todo.getTime();
-                    const todo = new Date(todo).toLocaleTimeString('en',
-                 { timeStyle: 'short', hour12: false, timeZone: 'UTC' });
-                    if(todo==item)
+                    if(e.reminder!=null)
                     {
-                        alert('complete todo now')
-                        let url = "{{ route('complete',':id') }}";
-                        url = url.replace(':id',e.id);
-                        console.log(url)
-                        document.location.href=url;
+                            var todo=new Date();
+                        console.log(e.reminder)
+                        var task=e.reminder.split(":");
+                        todo.setHours(task[0]);
+                        todo.setMinutes(task[1]);
+                        todo.setSeconds(0);
+                        // todo=todo.getTime();
+                        const todolatest = new Date(todo).toLocaleTimeString('en',
+                        { timeStyle: 'short', hour12: false, timeZone: 'UTC' });
+                        if(todolatest==itemlatest)
+                        {
+                            clearInterval(inter)
+                            alert('Its time to do "'+e.name+'" Todo!')
+                            let url = "{{ route('complete',':id') }}";
+                            url = url.replace(':id',e.id);
+                            console.log(url)
+                            document.location.href=url;
+                        }
                     }
                 });
-                imran();
             }
 
         },1000);
               
     });
-    function imran(){
-        clearInterval(inter);
-    }
+   
 </script>
 @endsection
