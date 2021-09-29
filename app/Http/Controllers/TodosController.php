@@ -13,7 +13,7 @@ class TodosController extends Controller
         $this->middleware('auth');
     }
     function index(){
-        return view('todos.index')->with('todos',Todo::all());
+        return view('todos.index')->with('todos',Todo::all()->sortByDesc("priority"));
     }
     function show(Todo $todo){
         return view('todos.show')->with('todo',$todo);
@@ -66,8 +66,21 @@ class TodosController extends Controller
         $todo->save();
         session()->flash('status',' Todo completed successfully.');
         return redirect(route('index'));
-
-
-
+    }
+    function priority(Todo $todo)
+    {
+        // $todo->priority=now();
+        $todo->priority=Carbon::now()->toDateTimeString();
+        $todo->save();
+        session()->flash('status',' Todo set to Priority Successfully.');
+        return redirect(route('index'));
+    }
+    function remPriority(Todo $todo)
+    {
+        // $todo->priority=now();
+        $todo->priority=null;
+        $todo->save();
+        session()->flash('status',' Todo remove Priority Successfully.');
+        return redirect(route('index'));
     }
 }
