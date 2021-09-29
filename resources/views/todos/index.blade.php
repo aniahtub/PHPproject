@@ -140,12 +140,16 @@ Todos list
         item.setHours(element[0]);
         item.setMinutes(element[1]);
         item.setSeconds(0);
-        item=item.getTime();
+        // item=item.getTime();
+        const item = new Date(item).toLocaleTimeString('en',
+                 { timeStyle: 'short', hour12: false, timeZone: 'UTC' });
         var inter=setInterval(() => {
                 console.log('hii')
             var today=new Date()
             today.setSeconds(0);
-            today=today.getTime()
+            // today=today.getTime()
+            const today = new Date(today).toLocaleTimeString('en',
+                 { timeStyle: 'short', hour12: false, timeZone: 'UTC' });
             console.log(today)
             console.log(item)
             if(today==item)
@@ -156,7 +160,9 @@ Todos list
                     todo.setHours(task[0]);
                     todo.setMinutes(task[1]);
                     todo.setSeconds(0);
-                    todo=todo.getTime();
+                    // todo=todo.getTime();
+                    const todo = new Date(todo).toLocaleTimeString('en',
+                 { timeStyle: 'short', hour12: false, timeZone: 'UTC' });
                     if(todo==item)
                     {
                         alert('complete todo now')
@@ -169,7 +175,7 @@ Todos list
                 imran();
             }
 
-        },1);
+        },1000);
               
     });
     function imran(){
