@@ -86,13 +86,7 @@ Todos list
     console.log(currentTimenow)
     var todosSize=0;
     var todosArray=[];
-    for(key in $todos)
-    {
-        if ($todos.hasOwnProperty(key)) todosSize++;
-    }
-    for (let i = 0; i < todosSize; i++) {
-        todosArray.push($todos[i]);
-    }
+    todosArray=Object.values($todos);
     console.log(todosArray)
     $todos=todosArray;
     $reminders=[]
