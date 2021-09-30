@@ -55,8 +55,7 @@ Todos list
                     <li class="list-group-item {{($todo->priority!=null)?'bg-success':' '}} ">
                         {{$todo->name}}
                         @if ($todo->completed)
-                        <a href="#"
-                            class="btn btn-outline-warning btn-sm float-right">Complete</a>
+                        <a href="#" class="btn btn-outline-warning btn-sm float-right">Completed</a>
                         @endif
                         <a href="{{route('destroy',$todo->id)}}" class="btn btn-sm btn-danger float-right mr-2">Delete</a>
                         <a href="{{route('edit',$todo->id)}}" class="btn btn-sm btn-info float-right mr-2">Edit</a>
@@ -68,6 +67,9 @@ Todos list
                         @else
                         <a href="{{route('priority',$todo->id)}}" class="btn btn-light btn-sm float-right mr-2">Set Priority</a>
                         @endif
+                        @if ($todo->reminder<now()->toTimeString()&&$todo->completed==0)
+                        <button class="btn btn-outline-danger btn-sm float-right mr-2">Missing Reminder</button>
+                        @endif
                     </li>
                     @endforeach
                 </ul>
@@ -78,11 +80,27 @@ Todos list
 <script>
     remValue=document.getElementById('reminder').value   
     $todos= {!! json_encode($todos->toArray()) !!}
+    const currentTimenow = new Date().toLocaleTimeString('en',
+                 { timeStyle: 'short', hour12: false,});
     console.log($todos)
+    console.log(currentTimenow)
+    var todosSize=0;
+    var todosArray=[];
+    for(key in $todos)
+    {
+        if ($todos.hasOwnProperty(key)) todosSize++;
+    }
+    for (let i = 0; i < todosSize; i++) {
+        todosArray.push($todos[i]);
+    }
+    console.log(todosArray)
+    $todos=todosArray;
     $reminders=[]
     $todos.forEach(element => {
-        if(element['reminder']!=null&&element['completed']!=1)
+        if(element['reminder']!=null&&element['completed']!=1&&element['reminder']>currentTimenow)
+        {
         $reminders.push(element['reminder'])
+        }
     });
     $reminders=$reminders.sort();
     console.log($reminders)
@@ -98,7 +116,7 @@ Todos list
         today.setSeconds(0);
         remTime=remTime.getTime()
         today=today.getTime()
-        if(remTime<today)
+        if(remTime<=today)
         {
         alert('Given time is not valid');
         }
@@ -117,7 +135,7 @@ Todos list
         remTime=remTime.getTime()
         today=today.getTime()
 
-        if(remTime<today)
+        if(remTime<=today)
         {
         alert('Given time is not valid');
         }
@@ -167,7 +185,6 @@ Todos list
                 $todos.forEach(e => {
                     if(e.reminder!=null)
                     {
-<<<<<<< HEAD
                             var todo=new Date();
                         console.log(e.reminder)
                         var task=e.reminder.split(":");
@@ -181,19 +198,12 @@ Todos list
                         {
                             clearInterval(inter)
                             alert('Its time to do "'+e.name+'" Todo!')
+                            // swal("Do your job!", 'Its time to do "'+e.name+'" Todo!', "warning");
                             let url = "{{ route('complete',':id') }}";
                             url = url.replace(':id',e.id);
                             console.log(url)
                             document.location.href=url;
                         }
-=======
-                        alert("It's time to complete"+e.name+"Todo!")
-                            let url = "{{ route('complete',':id') }}";
-                            url = url.replace(':id',e.id);
-                            console.log(url)
-                     
-                        document.location.href=url;
->>>>>>> master
                     }
                 });
             }
