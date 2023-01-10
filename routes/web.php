@@ -11,23 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
-Route::get('/todos','TodosController@index')->name('index');
-Route::get('/todos/{todo}', 'TodosController@show')->name('show');
-Route::get('/new-todo', 'TodosController@create')->name('create');
-Route::post('store-todo', 'TodosController@store')->name('store');
-Route::get('/todo/{todo}/edit', 'TodosController@edit')->name('edit');
-Route::post('/todo/{todo}/update', 'TodosController@update')->name('update');
-Route::get('/todo/{todo}/delete', 'TodosController@destroy')->name('destroy');
-Route::get('/todo/{todo}/complete', 'TodosController@complete')->name('complete');
-Route::get('/todo/{todo}/priority', 'TodosController@priority')->name('priority');
-Route::get('/todo/{todo}/remPriority', 'TodosController@remPriority')->name('remPriority');
-Auth::routes();
+Route::get('/','ContactController@index')->name('index');
+Route::post('/contact/store', 'ContactController@store')->name('contact.store');
+Route::post('/contact/{contact}/update', 'ContactController@update')->name('contact.update');
+Route::delete('/contact/{contact}/delete', 'ContactController@destroy')->name('destroy');
 
-Route::get('/home', 'HomeController@index')->name('home');
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
